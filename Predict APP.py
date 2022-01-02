@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[30]:
 
 
 import numpy as np
@@ -14,9 +14,16 @@ from bs4 import BeautifulSoup
 from sklearn.linear_model import LogisticRegression,LogisticRegressionCV
 import os
 import nltk
+import requests
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
+
+
+# In[45]:
+
+
+classifier_pick = st.file_uploader('Upload the classifier file here. You can download my version here https://drive.google.com/file/d/15uJpphNm0zStOYrIFvazGpnZSupDWwPs/view')
 
 
 # In[2]:
@@ -41,87 +48,40 @@ def tokenizer_fct(string):
     return text2
 
 
-# In[4]:
-
-
-# x=os.getcwd()
-
-
-# In[4]:
-
-
-# os.chdir('C:\\Users\\SANDRA\\formation\\Projet 5')
-
-
-# In[5]:
-
-
-pickle_in = open('df_tot_multi.pickle','rb')
-df_tot_multi = pickle.load(pickle_in)
-pickle_in.close()
-pickle_in = open('mlb.pickle','rb')
-mlb = pickle.load(pickle_in)
-pickle_in.close()
-pickle_in = open('classifier.pickle','rb')
-classifier = pickle.load(pickle_in)
-pickle_in.close()
-pickle_in = open('tf_vec_fitted_multi.pickle','rb')
-tf_vec_fitted_multi = pickle.load(pickle_in)
-pickle_in.close()
-
-
-# In[7]:
+# In[44]:
 
 
 txt =st.text_area('Text you wish to tag')
 
 
+# In[5]:
+
+
+pickle_in = open('mlb.pickle','rb')
+mlb = pickle.load(pickle_in)
+pickle_in.close()
+# pickle_in = open('classifier.pickle','rb')
+if classifier_pick!=None:
+    classifier = pickle.load(classifier_pick)
+# pickle_in.close()
+pickle_in = open('tf_vec_fitted_multi.pickle','rb')
+tf_vec_fitted_multi = pickle.load(pickle_in)
+pickle_in.close()
+# pickle_in = open('coeff.pickle','rb')
+# coeff = pickle.load(pickle_in)
+# pickle_in.close()
+
+
 # In[10]:
 
 
-txt = url_remover(txt)
-
-
-# In[11]:
-
-
-text = tf_vec_fitted_multi.transform([txt])
-
-
-# In[12]:
-
-
-x=classifier.predict_proba(text)
-
-
-# In[13]:
-
-
-x1 = pd.Series(x[0])
-x1 = x1.transpose()
-# label = x1.nlargest(n).index
-
-
-# In[14]:
-
-
-z=x1[x1>0.2].index
-
-
-# In[16]:
-
-
-u=mlb.classes_[z]
-
-
-# In[27]:
-
-
-st.write('your labels are',u)
-
-
-# In[21]:
-
-
-# df_tot_multi['Body_Title_multi'][0]
+if txt!=None:
+    txt = url_remover(txt)
+    text = tf_vec_fitted_multi.transform([txt])
+    x=classifier.predict_proba(text)
+    x1 = pd.Series(x[0])
+    x1 = x1.transpose()
+    z=x1[x1>0.2].index
+    u=mlb.classes_[z]
+    st.write('your labels are',u)
 
