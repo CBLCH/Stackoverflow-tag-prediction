@@ -18,7 +18,6 @@ import requests
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
-classifier_pick = st.file_uploader('Upload the classifier file here. You can download my version here https://drive.google.com/file/d/15uJpphNm0zStOYrIFvazGpnZSupDWwPs/view')
 def url_remover(text):
     soup = BeautifulSoup(text)
     x = soup.find_all('a')
@@ -38,7 +37,7 @@ pickle_in.close()
 pickle_in = open('classifier_100.pickle','rb')
 classifier = pickle.load(pickle_in)
 pickle_in.close()
-pickle_in = open('tf_vec_fitted_multi.pickle','rb')
+pickle_in = open('tf_vec_100.pickle','rb')
 tf_vec_fitted_multi = pickle.load(pickle_in)
 pickle_in.close()
 if len(txt)!=0:
